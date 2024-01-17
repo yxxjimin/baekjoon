@@ -18,17 +18,17 @@
 
 **1. Earliest Start Time**
 
-![Earliest start time](imgs/partition-start.png)
+![Earliest start time](imgs/schd-start.png)
 시작하는 시점이 가장 빠른 태스크를 선택한다고 하자. 이 때 선택된 태스크의 수행 시간이 매우 길다면 최적의 선택지가 아니게 된다.
 
 **2. Shortest Interval**
 
-![Shortest interval](imgs/partition-shortest.png)
-그렇다고 해서 수행 시간이 가장 짧은 태스크는 위와 같은 사례로 인해 역시 최적의 선택지가 아니다.
+![Shortest interval](imgs/schd-short.png)
+그렇다고 해서 수행 시간이 가장 짧은 태스크는 위 같은 사례처럼 역시 최적의 선택지가 아니다.
 
 **3. Fewest Conflicts**
 
-![Fewest conflicts](imgs/partition-conflict.png)
+![Fewest conflicts](imgs/schd-conflict.png)
 수행 시간이 겹치는 태스크의 갯수가 최소인 것을 선택해도 마찬가지로 최적의 선택지가 아니다.
 
 **4. Earliest Finish Time**
@@ -42,9 +42,9 @@
 > 2. 최적의 해로 선택된 태스크들이 j<sub>1</sub>, j<sub>2</sub>, ..., j<sub>n</sub>이라고 하자.
 > 3. (가정) 이 때 처음으로 i<sub>k</sub> != j<sub>k</sub>가 되도록 하는 지점을 r+1이라고 하자. 즉, 그리디로 선택된 조합은 k = r까지는 최적의 조합이지만 k = r+1부터는 최적의 조합이 아닌 것이다.
 > 4. 하지만 우리는 r+1번째 태스크를 선택할 때 끝나는 시점이 가장 빠른 태스크를 선택했으므로, i<sub>r+1</sub>의 끝나는 시점은 j<sub>r+1</sub>보다 빠를 것이다.
-> 5. 따라서 그리디로 선택된 조합은 r+1에서도 여전히 최적의 조합이므로 가정에 위반된다.
+> 5. 따라서 그리디로 선택된 조합은 r+1에서도 여전히 최적의 조합이므로 가정에 위배된다.
 >
-> ![Interval Partitioning](imgs/partition.png)
+> ![Interval Partitioning](imgs/schd-opt.png)
 
 **연관 문제**
 - 백준 1931번
