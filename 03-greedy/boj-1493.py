@@ -5,12 +5,11 @@ target_volume = length * width * height
 n = int(input())
 cubes = []
 for _ in range(n):
-    length_exp, count = input().split()
-    cubes.append((int(length_exp), int(count)))
+    cubes.append(tuple(map(int, input().split())))
 cubes.sort(reverse=True)
 
 total_cubes = 0
-aggregated_volume =0
+aggregated_volume = 0
 for cube in cubes:
     length_exp, cube_count = cube
     cube_length = 2 ** length_exp
