@@ -16,15 +16,28 @@ for _ in range(num_edges):
 
 # DFS
 visited = [False] * num_computers
-dfs_stack = [1]
-while len(dfs_stack) > 0:
-    node = dfs_stack.pop()
-    if not visited[node - 1]:
-        visited[node - 1] = True
-        # Handle num_edges = 0 (Empty adjacency list)
-        adj_nodes = adj_list[node] if node in adj_list else []
-        for adj_node in adj_nodes:
-            if not visited[adj_node - 1]:
-                dfs_stack.append(adj_node)
+
+# Stack
+#
+# dfs_stack = [1]
+# while len(dfs_stack) > 0:
+#     node = dfs_stack.pop()
+#     if not visited[node - 1]:
+#         visited[node - 1] = True
+#         # Handle num_edges = 0 (Empty adjacency list)
+#         adj_nodes = adj_list[node] if node in adj_list else set()
+#         for adj_node in adj_nodes:
+#             if not visited[adj_node - 1]:
+#                 dfs_stack.append(adj_node)
+
+# Recursion
+def dfs(node: int):
+    visited[node - 1] = True
+    adj_nodes = adj_list[node] if node in adj_list else set()
+    for adj_node in adj_nodes:
+        if not visited[adj_node - 1]:
+            dfs(adj_node)
+
+dfs(1)
 
 print(sum(visited[1:]))
