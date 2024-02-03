@@ -141,9 +141,10 @@ procedure BFS(G, root) is
 ```
 
 ```python
-queue = [root_node]
+from collections import deque
+queue = deque([root_node])
 while queue:
-    node = queue.pop(0)
+    node = queue.popleft()
     for adj_node in adj_list[node]:
         if not visited[adj_node]:
             visited[adj_node] = True
@@ -160,6 +161,7 @@ while queue:
         - 오히려 큐에 삽입되는 시점에 방문 처리를 미리 해주면 한 번 삽입되어 "처리될" 노드가 다시 삽입되는 것을 방지해준다.
 - 현재 시점의 깊이를 기록하고 싶다면 아래와 같이 `while`문 안에 `for`문을 추가적으로 중첩시키자.
     - 최단 경로 문제처럼 경로의 길이(깊이) 값을 구해야되는 문제에서 활용할 수 있을 것 같다.
+- 큐에서 뽑을 때 `list.pop(0)`은 $O(N)$만큼 걸리기 때문에 $O(1)$인 `deque.popleft()`를 사용하자.
 
 ```python
 distance = 0
