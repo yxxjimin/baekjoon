@@ -21,8 +21,8 @@
 - 파이썬 공식 문서: [`bisect` — Array bisection algorithm](https://docs.python.org/3/library/bisect.html#module-bisect)
 - 정렬된 리스트 $A$에 $x$를 삽입할 위치를 반환한다.
     - $x$가 삽입될 위치를 기준으로 리스트 왼쪽을 $L$, 오른쪽을 $R$이라고 하면
-    - `bisect_left()`: $L = \{i \in A: i \lt x \}$, $R = \{i \in A: i \geq x \}$
-    - `bisect()` / `bisect_right()`: $L = \{i \in A: i \leq x \}$, $R = \{i \in A: i \gt x \}$
+    - `bisect_left()`: $L = \lbrace i \in A: i \lt x \rbrace$, $R = \lbrace i \in A: i \geq x \rbrace$
+    - `bisect()` / `bisect_right()`: $L = \lbrace i \in A: i \leq x \rbrace$, $R = \lbrace i \in A: i \gt x \rbrace$
 - 정렬 메서드와 유사하게 `key` 인자를 통해 비교 키를 지정할 수 있다.
 
 ## 서브 토픽
