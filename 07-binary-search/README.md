@@ -19,11 +19,27 @@
 
 ### 파이썬 표준 라이브러리
 - 파이썬 공식 문서: [`bisect` — Array bisection algorithm](https://docs.python.org/3/library/bisect.html#module-bisect)
+- 호출하기 전에 미리 정렬해놔야 한다.
 - 정렬된 리스트 $A$에 $x$를 삽입할 위치를 반환한다.
     - $x$가 삽입될 위치를 기준으로 리스트 왼쪽을 $L$, 오른쪽을 $R$이라고 하면
     - `bisect_left()`: $L = \lbrace i \in A: i \lt x \rbrace$, $R = \lbrace i \in A: i \geq x \rbrace$
     - `bisect()` / `bisect_right()`: $L = \lbrace i \in A: i \leq x \rbrace$, $R = \lbrace i \in A: i \gt x \rbrace$
 - 정렬 메서드와 유사하게 `key` 인자를 통해 비교 키를 지정할 수 있다.
+
+**소스코드: [Lib/bisect.py](https://github.com/python/cpython/tree/3.12/Lib/bisect.py)**
+```python
+def bisect_left(a, x, lo=0, hi=None, *, key=None):
+    # (전략)
+    if key is None:
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if a[mid] < x:
+                lo = mid + 1
+            else:
+                hi = mid
+    # (후략)
+    return lo
+```
 
 ## 서브 토픽
 ### 파라메트릭 서치 (Parametric Search)
