@@ -17,14 +17,26 @@
 - 트리의 노드 $x$는 항상 두 개의 자식 노드 $x_L$, $x_R$을 갖는다.
     - 모든 $x$에 대해 $x_L \lt x \lt x_R$이 성립한다.
 
-### 파이썬 표준 라이브러리
-- 파이썬 공식 문서: [`bisect` — Array bisection algorithm](https://docs.python.org/3/library/bisect.html#module-bisect)
+## 파이썬 표준 라이브러리
+### [`bisect` — Array bisection algorithm](https://docs.python.org/3/library/bisect.html#module-bisect)
 - 호출하기 전에 미리 정렬해놔야 한다.
-- 정렬된 리스트 $A$에 $x$를 삽입할 위치를 반환한다.
-    - $x$가 삽입될 위치를 기준으로 리스트 왼쪽을 $L$, 오른쪽을 $R$이라고 하면
+- *정렬된* 리스트에 $x$를 삽입하려고 할 때, $x$가 삽입되어야 할 위치(인덱스)를 반환해준다.
+    <!-- - $x$가 삽입될 위치를 기준으로 리스트 왼쪽을 $L$, 오른쪽을 $R$이라고 하면
     - `bisect_left()`: $L = \lbrace i \in A: i \lt x \rbrace$, $R = \lbrace i \in A: i \geq x \rbrace$
-    - `bisect()` / `bisect_right()`: $L = \lbrace i \in A: i \leq x \rbrace$, $R = \lbrace i \in A: i \gt x \rbrace$
+    - `bisect()` / `bisect_right()`: $L = \lbrace i \in A: i \leq x \rbrace$, $R = \lbrace i \in A: i \gt x \rbrace$ -->
 - 정렬 메서드와 유사하게 `key` 인자를 통해 비교 키를 지정할 수 있다.
+
+### Lower Bound & Upper Bound
+- `bisect.bisect_left()`와 `bisect.bisect_right()`는 각각 인자로 주어진 값의 하한(lower bound)과 상한(upper bound)를 반환한다.
+
+- 오름차순으로 정렬된 리스트 $A$에 데이터 $x$를 삽입했을 때, $x$를 기준으로 왼쪽을 $L$, 오른쪽을 $R$이라고 하면
+    - 하한에 삽입: $L = \lbrace i \in A: i \lt x \rbrace$, $R = \lbrace i \in A: i \geq x \rbrace$
+    - 상한에 삽입: $L = \lbrace i \in A: i \leq x \rbrace$, $R = \lbrace i \in A: i \gt x \rbrace$
+- 주어진 값이 리스트 안에 존재하지 않으면 동일한 값을 반환할 것이다.
+
+<div align="center">
+    <img src="./imgs/bisection.png" width="500" />
+</div>
 
 **소스코드: [Lib/bisect.py](https://github.com/python/cpython/tree/3.12/Lib/bisect.py)**
 ```python
@@ -36,7 +48,25 @@ def bisect_left(a, x, lo=0, hi=None, *, key=None):
             if a[mid] < x:
                 lo = mid + 1
             else:
+                # 중간값과 탐색하려는 값이 같다면 
+                # 탐색 범위의 끝 지점을 조정
+                # (Next interval: lower half)
                 hi = mid
+    # (후략)
+    return lo
+
+def bisect_right(a, x, lo=0, hi=None, *, key=None):
+    # (전략)
+    if key is None:
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if x < a[mid]:
+                hi = mid
+            else:
+                # 중간값과 탐색하려는 값이 같다면 
+                # 탐색 범위의 시작 지점을 조정
+                # (Next interval: upper half)
+                lo = mid + 1
     # (후략)
     return lo
 ```
@@ -46,3 +76,8 @@ def bisect_left(a, x, lo=0, hi=None, *, key=None):
 - 최적화 문제를 결정 문제(i.e. Yes-no question)로 바꾸어 해결하는 기법이다.
     - *주어진 값(threshold)보다 나은 해가 존재하는가?* 에 대한 결정 문제로 바뀐다.
 - 이진 탐색을 활용하여 해의 범위를 좁혀나가는 방식이다.
+    - 특정 조건을 만족시키는 최댓값을 구하는 문제
+        - 최댓값의 위치: `bisect_right() - 1`
+        - `bisect_right()`는 주어진 기준을 *초과*하는 첫 번째 위치를 반환하므로 1을 빼준 위치가 기준을 만족시키는 상한값의 위치이다.
+    - 특정 조건을 만족시키는 최솟값을 구하는 문제
+        - 최솟값의 위치: `bisect_left()`
