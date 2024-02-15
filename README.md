@@ -10,3 +10,4 @@
 |24. 01. 29|이것이 코딩테스트다 — [05장. DFS/BFS](/05-dfs-bfs/README.md)|
 |24. 02. 05|이것이 코딩테스트다 — [06장. 정렬](/06-sorting/README.md)|
 |24. 02. 12|이것이 코딩테스트다 — [07장. 이진 탐색](/07-binary-search/README.md)|
+|24. 02. 19|이것이 코딩테스트다 — [08장. 다이나믹 프로그래밍](/08-dynamic-programming/README.md)|
