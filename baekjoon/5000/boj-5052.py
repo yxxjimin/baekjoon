@@ -8,14 +8,12 @@ def main():
     phones = [sys.stdin.readline().strip() for _ in range(num_phones)]
     phones.sort()
 
-    consistent = True
-
     for i in range(1, len(phones)):
         if phones[i - 1] == phones[i][:len(phones[i - 1])]:
-            consistent = False
-            break
+            print("NO")
+            return
 
-    print("YES" if consistent else "NO")
+    print("YES")
 
 
 if __name__ == "__main__":
