@@ -27,8 +27,6 @@ def main():
                 hdghg_queue.append((r, c))
             elif line[c] == "*":
                 water_queue.append((r, c))
-            elif line[c] == "D":
-                tgt = (r, c)
     
     # BFS
     time = 0
@@ -49,7 +47,7 @@ def main():
                     graph[new_r][new_c] = "*"
                     water_queue.append((new_r, new_c))
 
-        # Hedgehg moves
+        # Hedgehog moves
         for _ in range(len(hdghg_queue)):
             curr_r, curr_c = hdghg_queue.popleft()
             for dr, dc in drdc:
