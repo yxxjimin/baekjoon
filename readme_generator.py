@@ -1,16 +1,15 @@
-import bisect
+import collections
 import pathlib
 import re
 
 
-ROOT_DIR = pathlib.Path(__file__).parent
-FILE_PATH = ROOT_DIR / 'README.md'
-STEP_SIZE = 2000
+type ProblemFilesMap = dict[int, list[pathlib.Path]]
+type GroupedProblemFilesMap = dict[int, list[tuple[int, pathlib.Path]]]
 
 
-def _depth_first() -> dict[int, pathlib.Path]:
-    stack = [ROOT_DIR]
-    problem_map = dict()
+def _find_all_files(root: pathlib.Path) -> ProblemFilesMap:
+    stack = [root]
+    problem_map = collections.defaultdict(list)
     
     while stack:
         curr_dir = stack.pop()
@@ -19,26 +18,26 @@ def _depth_first() -> dict[int, pathlib.Path]:
                 stack.append(subpath)
             elif matched := re.findall(r'boj-(\d+).*', str(subpath)):
                 number = int(matched[0])
-                rel_path = subpath.relative_to(ROOT_DIR)
-                problem_map[number] = rel_path
+                rel_path = subpath.relative_to(root)
+                problem_map[number].append(rel_path)
     
     return problem_map
 
 
-def _compose_data(
-    data: dict[int, pathlib.Path]
-) -> dict[int, list[tuple[int, pathlib.Path]]]:
-    max_number = max(data.keys())
-    last_index = max_number // STEP_SIZE + 1
+def _aggregate_problem_files(
+    data: ProblemFilesMap, 
+    step_size: int
+) -> GroupedProblemFilesMap:
+    aggregated_map = collections.defaultdict(list)
 
-    new_keys = [i * STEP_SIZE for i in range(last_index)]
-    new_data = {k: [] for k in new_keys}
+    for key, values in data.items():
+        new_key = (key // step_size) * step_size
+        for value in values:
+            aggregated_map[new_key].append((key, value))
 
-    for num, path in data.items():
-        key = new_keys[bisect.bisect_right(new_keys, num) - 1]
-        new_data[key].append((num, path))
-
-    return {k: sorted(v) for k, v in new_data.items()}
+    return dict(
+        sorted({k: sorted(v) for k, v in aggregated_map.items()}.items())
+    )
 
 
 def _markdown_heading(n: int, title: str) -> str:
@@ -58,18 +57,21 @@ def _markdown_table(
     return th
 
 
-def _markdown_content() -> str:
-    return '\n'.join([
-        _markdown_heading(1, '알고리즘'),
-        _markdown_heading(3, 'Baekjoon'),
-        _markdown_table(
-            _compose_data(
-                _depth_first()
-            )
-        )
-    ])
-
-
 if __name__ == '__main__':
+    ROOT_DIR = pathlib.Path(__file__).parent
+    FILE_PATH = ROOT_DIR / 'README.md'
+    STEP_SIZE = 2000
+
     with open(FILE_PATH, 'w') as f:
-        f.write(_markdown_content())
+        f.write(
+            '\n'.join([
+                _markdown_heading(1, '알고리즘'),
+                _markdown_heading(3, 'Baekjoon'),
+                _markdown_table(
+                    _aggregate_problem_files(
+                        data=_find_all_files(ROOT_DIR),
+                        step_size=STEP_SIZE
+                    )
+                )
+            ])
+        )
